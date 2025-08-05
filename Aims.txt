@@ -1,0 +1,12 @@
+2.Symbol table - Construction and error detection
+Construct symbol table and identify lexical errors in declaration and usage.
+
+PS:
+1) Write a program to identity and extract the declare identifier and store them in symbol table.
+2) Display identifiers names, datatype, scope and memory usage in tabular form. {Array stack queue}
+3) Detect multiple declarations of same identifiers.
+4) Report misuse of keywords as identifiers.
+
+---------------
+
+3. Top down parser: Create a recursive decent parser for arithimatic expressions like a + b + c or id + id * id.
