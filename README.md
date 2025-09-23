@@ -26,3 +26,9 @@ PS:
 - Write a program to check if a string can be derive using CFG.
 
 ----------------
+
+5. Generate or design or implement a bottom up parser for parsing arithematic expression like id + id * id. (Operator Presedence parser) 
+or 
+Implement A bottom up parser ( LR0 OR SLR1 OR CLR OR LALR ) taking a suitable CFG .
+
+----------------
