@@ -32,3 +32,12 @@ or
 Implement A bottom up parser ( LR0 OR SLR1 OR CLR OR LALR ) taking a suitable CFG .
 
 ----------------
+
+6. Syntax Directed Translation
+- Translate expression using semantic rules for evaluation and code generation.
+PS:
+1) Crack the type of expression using syntasize or inherited attributes.
+2) check for type mismatch and undefined variables using semantic rules.
+3) Evaluate the arithematic expression using attribute grammer.
+
+---------------

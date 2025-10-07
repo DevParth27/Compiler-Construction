@@ -2,73 +2,123 @@
 #include <ctype.h>
 #include <string.h>
 
-char *input;
-int pos = 0;
-int error = 0;
+static const char *input;
+static int pos = 0;
+static int error = 0;
 
-void E();
-void Eprime();
-void T();
-void Tprime();
-void F();
-
-void match(char expected) {
-    if (input[pos] == expected) {
+static void skip_whitespace(void) {
+    while (input[pos] == ' ' || input[pos] == '\t' || input[pos] == '\r')
         pos++;
-    } else {
-        printf("Syntax Error: Expected '%c' at position %d\n", expected, pos);
-        error = 1;
-    }
 }
 
-void E() {
+static char peek(void) {
+    skip_whitespace();
+    return input[pos];
+}
+
+static void syntax_error(const char *msg) {
+    if (!error) {
+        fprintf(stderr, "Syntax Error at position %d: %s (got '%c')\n",
+                pos, msg, input[pos] ? input[pos] : '#');
+    }
+    error = 1;
+}
+
+/* Forward declarations */
+static void E(void);
+static void Eprime(void);
+static void T(void);
+static void Tprime(void);
+static void F(void);
+
+static void E(void) {
+    if (error) return;
     T();
     Eprime();
 }
 
-void Eprime() {
-    if (input[pos] == '+') {
-        match('+');
+static void Eprime(void) {
+    if (error) return;
+    while (peek() == '+') {          // E' -> + T E' | ε
+        pos++;                       // match '+'
         T();
-        Eprime();
+        if (error) return;
+        // loop continues to chain multiple + terms
     }
+    // epsilon
 }
 
-void T() {
+static void T(void) {
+    if (error) return;
     F();
     Tprime();
 }
-void Tprime() {
-    if (input[pos] == '*') {
-        match('*');
+
+static void Tprime(void) {
+    if (error) return;
+    while (peek() == '*') {          // T' -> * F T' | ε
+        pos++;                       // match '*'
         F();
-        Tprime();
+        if (error) return;
+        // loop continues to chain multiple * factors
     }
+    // epsilon
 }
-void F() {
-    if (isalpha(input[pos])) {
-        match(input[pos]);
+
+static void F(void) {
+    if (error) return;
+    char c = peek();
+
+    if (c == '(') {                  // F -> ( E )
+        pos++;                       // match '('
+        E();
+        if (error) return;
+        if (peek() == ')') {
+            pos++;                   // match ')'
+        } else {
+            syntax_error("Expected ')'");
+        }
+    } else if (isalpha((unsigned char)c) || c == '_') {
+        // F -> id (identifier starting with letter/_; then letters/digits/_)
+        pos++; // consumed first char
+        while (isalnum((unsigned char)input[pos]) || input[pos] == '_') pos++;
+    } else if (c == '\0') {
+        syntax_error("Unexpected end of input, expected id or '('");
     } else {
-        printf("Syntax Error: Expected id at position %d\n", pos);
-        error = 1;
+        syntax_error("Expected id or '('");
     }
 }
 
-int main() {
-    char expr[100];
+int main(void) {
+    char expr[256];
+
     printf("Enter arithmetic expression: ");
-    fgets(expr, sizeof(expr), stdin);
-    expr[strcspn(expr, "\n")] = 0; 
+    if (!fgets(expr, sizeof(expr), stdin)) {
+        fprintf(stderr, "Failed to read input.\n");
+        return 1;
+    }
+    // strip trailing newline
+    expr[strcspn(expr, "\n")] = '\0';
+
     input = expr;
     pos = 0;
     error = 0;
+
     E();
+    skip_whitespace();
+
     if (!error && input[pos] == '\0') {
         printf("String Accepted!\n");
     } else if (!error) {
-        printf("Syntax Error: Unexpected character '%c' at position %d\n", input[pos], pos);
+        fprintf(stderr, "Syntax Error: Unexpected character '%c' at position %d\n",
+                input[pos], pos);
+        error = 1;
     } else {
         printf("String Rejected due to syntax errors.\n");
     }
-    return 0;
+
+    // Keep the console open if run by double-clicking on Windows
+    printf("Press Enter to exit...");
+    getchar();
+    return error ? 1 : 0;
 }
