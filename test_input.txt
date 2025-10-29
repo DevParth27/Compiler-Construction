@@ -1,0 +1,5 @@
+int x;
+float y;
+x = 10 + 5;
+y = 3.14 * 2.0;
+int result = x + y;
