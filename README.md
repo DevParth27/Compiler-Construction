@@ -41,3 +41,13 @@ PS:
 3) Evaluate the arithematic expression using attribute grammer.
 
 ---------------
+
+7. intermediate code generation 
+
+problem statement :
+1. generate postfix expression and 3 address code for given string. 
+2. generate 3 address code for given instruction 
+    1. conditional statement 
+    2. loops 
+    3. array      
+    any one

@@ -1,0 +1,11 @@
+int x, y, z;
+x = a + b * c - d;
+if (x > y) {
+    z = x + y;
+} else {
+    z = x - y;
+}
+while (i < 10) {
+    sum = sum + i;
+}
+arr[i] = x + y * z;

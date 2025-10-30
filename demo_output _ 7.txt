@@ -1,0 +1,58 @@
+=== PRACTICAL 07 - INTERMEDIATE CODE GENERATION DEMO ===
+
+1. POSTFIX EXPRESSION & 3-ADDRESS CODE GENERATION
+   Input: a + b * c - d
+   Postfix: a b c * + d -
+   3-Address Code:
+   0: t0 = b * c
+   1: t1 = a + t0
+   2: t2 = t1 - d
+
+2. CONDITIONAL STATEMENT (IF-ELSE)
+   Input: if (x > y) then z = x + y else z = x - y
+   3-Address Code:
+   0: t0 = x > y
+   1: if_false t0 goto L0
+   2: t1 = x + y
+   3: z = t1
+   4: goto L1
+   5: L0:
+   6: t2 = x - y
+   7: z = t2
+   8: L1:
+
+3. LOOP CONSTRUCT (WHILE)
+   Input: while (i < 10) sum = sum + i
+   3-Address Code:
+   0: L0:
+   1: t0 = i < 10
+   2: if_false t0 goto L1
+   3: t1 = sum + i
+   4: sum = t1
+   5: goto L0
+   6: L1:
+
+4. ARRAY OPERATIONS
+   Input: arr[i] = x + y * z
+   3-Address Code:
+   0: t0 = y * z
+   1: t1 = x + t0
+   2: t2 = i * 4
+   3: arr[t2] = t1
+
+=== FEATURES DEMONSTRATED ===
+✓ Infix to Postfix conversion with operator precedence
+✓ 3-Address Code generation for arithmetic expressions
+✓ Conditional branching with labels and jumps
+✓ Loop constructs with proper label management
+✓ Array indexing with address calculation
+✓ Temporary variable generation
+✓ Label generation for control flow
+
+=== TOKEN ANALYSIS (from Lexer) ===
+- Keywords: if, else, while, for, int, float
+- Identifiers: Variable names for 3-address operands
+- Literals: Integer and float constants
+- Operators: +, -, *, /, =, >, <, >=, <=, ==, !=
+- Delimiters: (, ), [, ], {, }, ;, ,
+- Semantic actions for each token type
